@@ -11,3 +11,12 @@ license = "MIT"
 keywords = ["discord", "discord-api", "utility", "twilight"]
 
 [dependencies]
+derive_builder = "0.20.2"
+futures-util = "0.3.34"
+thiserror = "2.0.20"
+tokio = "1.53.1"
+tracing = "0.1.44"
+twilight-gateway = "0.17.1"
+twilight-http = "0.17.1"
+twilight-model = "0.17.1"
+async-trait = "0.1.92"

@@ -1,14 +1,12 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+pub mod client;
+pub mod commands;
+pub mod context;
+pub mod error;
+pub mod ext;
+pub mod framework;
+pub mod gateway;
+pub mod macros;
+pub mod model;
+mod utils;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub use client::Client;
