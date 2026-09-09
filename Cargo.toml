@@ -2,5 +2,12 @@
 name = "twilight-aurora"
 version = "0.1.0"
 edition = "2024"
+authors = ["Adithya Udupa <maskddev@gmail.com>"]
+description = "A wrapper crate for the twilight ecosystem providing convenient utilities for bot development."
+documentation = "https://docs.rs/twilight-aurora"
+repository = "https://github.com/MaskdDev/twilight-aurora"
+readme = "README.md"
+license = "MIT"
+keywords = ["discord", "discord-api", "utility", "twilight"]
 
 [dependencies]
