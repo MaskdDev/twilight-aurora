@@ -9,4 +9,7 @@ pub mod macros;
 pub mod model;
 mod utils;
 
-pub use client::Client;
+pub use client::{Client, ClientBuilder};
+pub use commands::{Command, CommandHandler, TwilightCommand};
+pub use context::{AppContext, CommandContext};
+pub use framework::{CommandFramework, CommandFrameworkBuilder};
