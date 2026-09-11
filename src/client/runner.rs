@@ -64,7 +64,7 @@ where
                     .expect("This was just verified to belong to an existing command.");
 
                 // Create command context
-                let cmd_ctx = CommandContext::new(ctx.clone(), &command, interaction.0, data);
+                let cmd_ctx = CommandContext::new(ctx.clone(), command, interaction.0, data);
 
                 // Run command check
                 if let Ok(check) = (ctx.framework.command_check)(cmd_ctx.clone()).await

@@ -202,7 +202,7 @@ impl CreateReply {
     }
 
     /// Add a specific combination of flags to the reply's flags.
-    fn add_flags(self, flags: MessageFlags) -> Self {
+    pub fn add_flags(self, flags: MessageFlags) -> Self {
         let new_flags = match self.data.flags {
             Some(old_flags) => old_flags | flags,
             None => flags,
@@ -211,13 +211,13 @@ impl CreateReply {
     }
 
     /// Remove a specific combination of flags from the reply's flags.
-    fn remove_flags(mut self, flags: MessageFlags) -> Self {
+    pub fn remove_flags(mut self, flags: MessageFlags) -> Self {
         self.data.flags = self.data.flags.map(|f| f.difference(flags));
         self
     }
 
     /// Set the reply's suppress embeds flag.
-    fn suppress_embeds(self, suppress_embeds: bool) -> Self {
+    pub fn suppress_embeds(self, suppress_embeds: bool) -> Self {
         if suppress_embeds {
             self.add_flags(MessageFlags::SUPPRESS_EMBEDS)
         } else {
@@ -226,7 +226,7 @@ impl CreateReply {
     }
 
     /// Set the reply's components v2 flag.
-    fn components_v2(self, components_v2: bool) -> Self {
+    pub fn components_v2(self, components_v2: bool) -> Self {
         if components_v2 {
             self.add_flags(MessageFlags::IS_COMPONENTS_V2)
         } else {

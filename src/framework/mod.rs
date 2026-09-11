@@ -8,6 +8,11 @@ use futures_util::future::BoxFuture;
 use std::convert::Infallible;
 use std::fmt::Debug;
 
+// Types for command framework callbacks.
+type CommandHook<T, E> = fn(CommandContext<T, E>) -> BoxFuture<'static, ()>;
+type CommandCheck<T, E> = fn(CommandContext<T, E>) -> BoxFuture<'static, Result<bool, E>>;
+
+/// A command framework used to handle slash commands.
 #[derive(Builder)]
 #[builder(pattern = "owned", vis = "pub")]
 #[builder(build_fn(error = "Infallible"))]
@@ -22,15 +27,15 @@ where
 
     /// The pre-command handler for this framework.
     #[builder(default = "handlers::default_pre_command")]
-    pub(crate) pre_command: fn(CommandContext<T, E>) -> BoxFuture<'static, ()>,
+    pub(crate) pre_command: CommandHook<T, E>,
 
     /// The post-command handler for this framework.
     #[builder(default = "handlers::default_post_command")]
-    pub(crate) post_command: fn(CommandContext<T, E>) -> BoxFuture<'static, ()>,
+    pub(crate) post_command: CommandHook<T, E>,
 
     /// A check run before every command. The command is only executed if this returns true.
     #[builder(default = "handlers::default_command_check::<T, E>")]
-    pub(crate) command_check: fn(CommandContext<T, E>) -> BoxFuture<'static, Result<bool, E>>,
+    pub(crate) command_check: CommandCheck<T, E>,
 }
 
 impl<T, E> CommandFramework<T, E>
@@ -100,8 +105,6 @@ where
         let parent_name = segments.next();
 
         // Return command
-        parent_name
-            .map(|name| self.commands.iter().find(|c| c.command.name == name))
-            .flatten()
+        parent_name.and_then(|name| self.commands.iter().find(|c| c.command.name == name))
     }
 }

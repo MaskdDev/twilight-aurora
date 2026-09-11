@@ -5,7 +5,6 @@ use std::fmt::Debug;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use twilight_http::client::InteractionClient;
-use twilight_http::request::application::interaction::CreateFollowup;
 use twilight_http::{Error, Response};
 use twilight_model::application::interaction::Interaction;
 use twilight_model::application::interaction::application_command::CommandData;

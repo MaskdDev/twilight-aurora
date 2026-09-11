@@ -17,6 +17,10 @@ use twilight_model::gateway::Intents;
 use twilight_model::gateway::event::Event;
 use twilight_model::oauth::Application;
 
+// Types for client callbacks.
+type ErrorHandler<T, E> = fn(AuroraRuntimeError<T, E>) -> BoxFuture<'static, ()>;
+type EventHandler<T, E> = fn(Event, AppContext<T, E>) -> BoxFuture<'static, Result<(), E>>;
+
 /// The client struct representing a discord application.
 #[derive(Builder)]
 #[builder(pattern = "owned", vis = "pub")]
@@ -50,11 +54,11 @@ where
 
     /// The error handler for this client.
     #[builder(default = "handlers::default_on_error::<T, E>")]
-    on_error: fn(AuroraRuntimeError<T, E>) -> BoxFuture<'static, ()>,
+    on_error: ErrorHandler<T, E>,
 
     /// The application's event handler. This runs for all events apart from InteractionCreate,
     /// which is handled by the framework.
-    event_handler: fn(Event, AppContext<T, E>) -> BoxFuture<'static, Result<(), E>>,
+    event_handler: EventHandler<T, E>,
 
     /// The application's shard messengers.
     #[builder(setter(skip))]
@@ -109,12 +113,7 @@ where
         }
 
         // Wait for all shard runners to exit
-        while let Some(shard_result) = shard_runners.join_next().await {
-            match shard_result {
-                Ok(_) => {}
-                Err(_) => {}
-            }
-        }
+        while shard_runners.join_next().await.is_some() {}
 
         // Return Ok
         Ok(())
@@ -128,7 +127,7 @@ where
         let config = ConfigBuilder::new(self.token.to_string(), self.intents).build();
 
         // Create recommended shards
-        let shards = create_recommended(&*self.http, config, |_, builder| builder.build())
+        let shards = create_recommended(&self.http, config, |_, builder| builder.build())
             .await?
             .collect::<Vec<Shard>>();
 
