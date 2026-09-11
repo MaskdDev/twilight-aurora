@@ -80,6 +80,24 @@ where
         self.app_ctx.interaction_client()
     }
 
+    /// Send a text-only reply in response to this command.
+    ///
+    /// Sends an initial response if no response to this command has been sent, or
+    /// edits an existing response if one has been made.
+    pub async fn say(&self, content: impl Into<String>) -> Result<(), Error> {
+        self.send(CreateReply::new().content(content)).await
+    }
+
+    /// Send a text-only reply in response to this command, ephemerally.
+    ///
+    /// Sends an initial response if no response to this command has been sent, or
+    /// edits an existing response if one has been made (will not be ephemeral unless the previous
+    /// response was already ephemeral).
+    pub async fn say_ephemeral(&self, content: impl Into<String>) -> Result<(), Error> {
+        self.send(CreateReply::new().content(content).ephemeral(true))
+            .await
+    }
+
     /// Send a reply in response to this command.
     ///
     /// Sends an initial response if no response to this command has been sent, or
