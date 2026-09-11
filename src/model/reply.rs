@@ -151,7 +151,19 @@ impl CreateReply {
         self
     }
 
-    /// Set the [`Embed`]s of the reply.
+    /// Add an [`Embed`] to the reply.
+    ///
+    /// Existing embeds are kept.
+    pub fn embed(mut self, embed: Embed) -> Self {
+        if let Some(embeds) = &mut self.data.embeds {
+            embeds.push(embed)
+        } else {
+            self.data.embeds = Some(vec![embed]);
+        }
+        self
+    }
+
+    /// Set the [`Embed`]s of the reply. Overwrites any embeds that may already be present.
     ///
     /// Defaults to an empty list.
     pub fn embeds(mut self, embeds: impl IntoIterator<Item = Embed>) -> Self {
