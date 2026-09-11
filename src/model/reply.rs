@@ -35,12 +35,15 @@ impl CreateReply {
     }
 
     /// Build the reply, returning an [`InteractionResponseData`] struct.
-    pub fn build(self) -> InteractionResponseData {
+    pub(crate) fn build(self) -> InteractionResponseData {
         self.data
     }
 
     /// Apply this reply as an update onto an [`UpdateResponse`].
-    pub fn apply<'a>(&'a self, mut update_response: UpdateResponse<'a>) -> UpdateResponse<'a> {
+    pub(crate) fn apply<'a>(
+        &'a self,
+        mut update_response: UpdateResponse<'a>,
+    ) -> UpdateResponse<'a> {
         // Add content to update, if present.
         update_response = match &self.data.content {
             Some(content) => update_response.content(Some(content)),
