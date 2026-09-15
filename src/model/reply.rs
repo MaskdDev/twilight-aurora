@@ -115,6 +115,18 @@ impl CreateReply {
         self
     }
 
+    /// Add a [`Component`] to the reply.
+    ///
+    /// Existing components are kept.
+    pub fn component(mut self, component: impl Into<Component>) -> Self {
+        if let Some(embeds) = &mut self.data.components {
+            embeds.push(component.into())
+        } else {
+            self.data.components = Some(vec![component.into()]);
+        }
+        self
+    }
+
     /// Set the message [`Component`]s of the reply.
     ///
     /// Defaults to [`None`].
